@@ -1,87 +1,158 @@
-swagger: "2.0"
-host: func-smh-ss-webapi-stage-003.azurewebsites.net
 basePath: /
-schemes:
-  - https
+definitions:
+  dtos.EventRequest:
+    properties:
+      eventId:
+        description: ID of the event to be booked
+        type: string
+      locationType:
+        description: The location information as to will the event will be in-person
+          or virtual
+        type: string
+      providerId:
+        description: ID of the provider for the event
+        type: string
+      userInfo:
+        allOf:
+        - $ref: '#/definitions/dtos.UserInfo'
+        description: Information about the user making the booking
+    type: object
+  dtos.Location:
+    properties:
+      facility:
+        description: Name of the facility
+        type: string
+      state:
+        description: State where the provider is located
+        type: string
+    type: object
+  dtos.ProviderRequest:
+    properties:
+      age:
+        description: Age input for filtering providers
+        type: string
+      clinicalFocus:
+        description: List of clinical focus areas
+        items:
+          type: string
+        type: array
+      deliveryMethod:
+        description: Preferred delivery method
+        type: string
+      ethnicity:
+        description: Ethnicity preference for filtering
+        type: string
+      gender:
+        description: Gender preference for filtering
+        type: string
+      language:
+        description: Language preference for filtering
+        type: string
+      location:
+        allOf:
+        - $ref: '#/definitions/dtos.Location'
+        description: Location details for filtering
+      therapeuticModality:
+        description: Preferred therapeutic modality
+        type: string
+    type: object
+  dtos.SearchEventRequest:
+    properties:
+      providerId:
+        description: List of provider IDs to search for available slots
+        items:
+          type: string
+        type: array
+    type: object
+  dtos.UserInfo:
+    properties:
+      userName:
+        description: User's name
+        type: string
+    type: object
+  healthCheck.HealthResponse:
+    properties:
+      message:
+        type: string
+      runtime:
+        type: string
+      status:
+        type: integer
+    type: object
+host: func-smh-ss-webapi-stage-003.azurewebsites.net
 info:
-  title: API Documentation
-  description: This API allows users to manage resources
-  version: "1.0"
   contact: {}
+  description: This API allows users to manage resources
+  title: API Documentation
+  version: "1.0"
 paths:
   /api/event:
     get:
       consumes:
-        - application/json
+      - application/json
       description: This function retrieves event details based on providerId and eventId
         from the request.
       parameters:
-        - description: Event ID
-          in: query
-          name: eventId
-          type: string
-        - description: Provider ID
-          in: query
-          name: providerId
-          type: string
+      - description: Event ID
+        in: query
+        name: eventId
+        type: string
+      - description: Provider ID
+        in: query
+        name: providerId
+        type: string
       produces:
-        - application/json
+      - application/json
       responses: {}
-      security:
-        - BearerAuth: []   # Attach Bearer token requirement here
       summary: Fetch event details
       tags:
-        - Search Provider without Events
+      - Search Provider without Events
   /api/event/book:
     post:
       consumes:
-        - application/json
+      - application/json
       description: BookingEvent handles the HTTP request for booking an event for
         a healthcare provider based on the provided event details.
       parameters:
-        - description: Event booking request details
-          in: body
-          name: bookEventBody
-          required: true
-          schema:
-            $ref: '#/definitions/dtos.EventRequest'
+      - description: Event booking request details
+        in: body
+        name: bookEventBody
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.EventRequest'
       produces:
-        - application/json
+      - application/json
       responses: {}
-      security:
-        - BearerAuth: []   # Attach Bearer token requirement here
       summary: Book an Event
       tags:
-        - Book Event
+      - Book Event
   /api/event/list:
     post:
       consumes:
-        - application/json
+      - application/json
       description: EventSearch handles the HTTP request for searching available time
         slots of healthcare providers based on specified filters.
       parameters:
-        - description: Search filters for available time slots
-          in: body
-          name: searchFilters
-          required: true
-          schema:
-            $ref: '#/definitions/dtos.SearchEventRequest'
+      - description: Search filters for available time slots
+        in: body
+        name: searchFilters
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.SearchEventRequest'
       produces:
-        - application/json
+      - application/json
       responses: {}
-      security:
-        - BearerAuth: []   # Attach Bearer token requirement here
       summary: Search Available Time Slots
       tags:
-        - events
+      - events
   /api/healthCheck:
     get:
       consumes:
-        - application/json
+      - application/json
       description: HealthCheckHandler checks the health of the service and returns
         the status in JSON format.
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: Health check successful
@@ -92,107 +163,78 @@ paths:
           schema:
             $ref: '#/definitions/healthCheck.HealthResponse'
       security:
-        - BearerAuth: []   # Attach Bearer token requirement here
+      - BearerAuth: []
       summary: Health Check
       tags:
-        - Health Check
+      - Health Check
   /api/incupdate:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Handles the incremental update of calendar events based on booking
         status.
       produces:
-        - application/json
+      - application/json
       responses: {}
-      security:
-        - BearerAuth: []   # Attach Bearer token requirement here
       summary: Incremental Update of Calendar Events
       tags:
-        - Calendar
+      - Calendar
   /api/load:
     post:
       consumes:
-        - application/json
+      - application/json
       description: This function initiates the loading of calendars and events for
         providers asynchronously.
       produces:
-        - application/json
+      - application/json
       responses: {}
-      security:
-        - BearerAuth: []   # Attach Bearer token requirement here
       summary: Load calendars and events
       tags:
-        - Calendar
+      - Calendar
   /api/provider:
     post:
       consumes:
-        - application/json
+      - application/json
       description: ProviderSearch handles the HTTP request for searching healthcare
         providers based on various filters and returns the results.
       parameters:
-        - description: Search filters for healthcare providers
-          in: body
-          name: f
-          required: true
-          schema:
-            $ref: '#/definitions/dtos.ProviderRequest'
+      - description: Search filters for healthcare providers
+        in: body
+        name: f
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.ProviderRequest'
       produces:
-        - application/json
+      - application/json
       responses: {}
-      security:
-        - BearerAuth: []   # Attach Bearer token requirement here
       summary: Search for Healthcare Providers
       tags:
-        - providers
+      - providers
   /api/v2/provider:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Retrieves a list of healthcare providers based on the provided
         search filters.
       parameters:
-        - description: Search filters for providers
-          in: body
-          name: filters
-          required: true
-          schema:
-            $ref: '#/definitions/dtos.ProviderRequest'
+      - description: Search filters for providers
+        in: body
+        name: filters
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.ProviderRequest'
       produces:
-        - application/json
+      - application/json
       responses: {}
-      security:
-        - BearerAuth: []   # Attach Bearer token requirement here
       summary: Fetch healthcare providers
       tags:
-        - Search Providers with Events
-
+      - Search Providers with Events
+schemes:
+- https
 securityDefinitions:
   BearerAuth:
+    description: This API requires a Bearer token in the `Authorization` header.
     in: header
     name: Authorization
     type: apiKey
-    description: Use `Bearer <token>` as the Authorization header to authenticate.
-definitions:
-  dtos.EventRequest:
-    type: object
-    properties:
-      eventId:
-        description: ID of the event to be booked
-        type: string
-      locationType:
-        description: The location information as to whether the event will be in-person
-          or virtual
-        type: string
-      providerId:
-        description: ID of the provider for the event
-        type: string
-      userInfo:
-        description: Information about the user making the booking
-        $ref: '#/definitions/dtos.UserInfo'
-  dtos.UserInfo:
-    type: object
-    properties:
-      userName:
-        description: User's name
-        type: string
+swagger: "2.0"

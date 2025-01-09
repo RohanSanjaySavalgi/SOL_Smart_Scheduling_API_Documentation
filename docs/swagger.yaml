@@ -85,10 +85,6 @@ info:
   description: This API allows users to manage resources
   title: API Documentation
   version: "1.0"
-info:
-  title: Microsoft OAuth2 Token Request
-  description: This API retrieves an OAuth2 token from Microsoft using client credentials.
-  version: 1.0.0
 paths:
   /oauth2/token:
     post:

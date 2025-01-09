@@ -79,7 +79,7 @@ definitions:
       status:
         type: integer
     type: object
-host: localhost:7071
+host: https://func-smh-ss-webapi-stage-003.azurewebsites.net
 info:
   contact: {}
 paths:

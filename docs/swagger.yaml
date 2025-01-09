@@ -79,9 +79,12 @@ definitions:
       status:
         type: integer
     type: object
-host: func-smh-ss-webapi-stage-003.azurewebsites.net
+host: https://func-smh-ss-webapi-stage-003.azurewebsites.net
 info:
   contact: {}
+  description: This API allows users to manage resources
+  title: API Documentation
+  version: "1.0"
 paths:
   /api/event:
     get:
@@ -226,4 +229,9 @@ paths:
       - Search Providers with Events
 schemes:
 - https
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

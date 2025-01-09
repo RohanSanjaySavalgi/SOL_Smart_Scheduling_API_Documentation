@@ -79,7 +79,7 @@ definitions:
       status:
         type: integer
     type: object
-host: https://func-smh-ss-webapi-stage-003.azurewebsites.net
+host: func-smh-ss-webapi-stage-003.azurewebsites.net
 info:
   contact: {}
   description: This API allows users to manage resources

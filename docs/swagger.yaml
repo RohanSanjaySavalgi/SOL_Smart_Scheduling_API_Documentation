@@ -17,6 +17,17 @@ definitions:
         - $ref: '#/definitions/dtos.UserInfo'
         description: Information about the user making the booking
     type: object
+  dtos.InterceptorResponse:
+    properties:
+      data:
+        description: The main data payload of the response, can be of any type
+      errorCode:
+        description: A code representing the specific error type, if applicable
+        type: string
+      errorMessage:
+        description: A message describing the error, if any occurred
+        type: string
+    type: object
   dtos.Location:
     properties:
       facility:
@@ -70,63 +81,13 @@ definitions:
         description: User's name
         type: string
     type: object
-  healthCheck.HealthResponse:
-    properties:
-      message:
-        type: string
-      runtime:
-        type: string
-      status:
-        type: integer
-    type: object
 host: func-smh-ss-webapi-stage-003.azurewebsites.net
 info:
   contact: {}
-  description: This API allows users to manage resources
-  title: API Documentation
+  description: This API is used to manage the SOL Smart Scheduling system
+  title: SOL Smart Scheduling API
   version: "1.0"
 paths:
-  /oauth2/token:
-    post:
-      summary: Request an OAuth2 token
-      description: Use client credentials to obtain an access token.
-      operationId: getAccessToken
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                grant_type:
-                  type: string
-                  example: client_credentials
-                client_id:
-                  type: string
-                  example: <client_id>
-                client_secret:
-                  type: string
-                  example: <client_secret>
-                resource:
-                  type: string
-                  example: 57ca2858-b3a3-432c-952f-e81688072593
-      responses:
-        '200':
-          description: Successfully retrieved access token
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  access_token:
-                    type: string
-                    example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIn..."
-        '400':
-          description: Bad request
-        '401':
-          description: Unauthorized
-        '500':
-          description: Server error
   /api/event:
     get:
       consumes:
@@ -198,11 +159,7 @@ paths:
         "200":
           description: Health check successful
           schema:
-            $ref: '#/definitions/healthCheck.HealthResponse'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/healthCheck.HealthResponse'
+            $ref: '#/definitions/dtos.InterceptorResponse'
       security:
       - BearerAuth: []
       summary: Health Check

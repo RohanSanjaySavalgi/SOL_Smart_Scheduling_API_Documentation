@@ -17,17 +17,6 @@ definitions:
         - $ref: '#/definitions/dtos.UserInfo'
         description: Information about the user making the booking
     type: object
-  dtos.InterceptorResponse:
-    properties:
-      data:
-        description: The main data payload of the response, can be of any type
-      errorCode:
-        description: A code representing the specific error type, if applicable
-        type: string
-      errorMessage:
-        description: A message describing the error, if any occurred
-        type: string
-    type: object
   dtos.Location:
     properties:
       facility:
@@ -81,6 +70,15 @@ definitions:
         description: User's name
         type: string
     type: object
+  healthCheck.HealthResponse:
+    properties:
+      message:
+        type: string
+      runtime:
+        type: string
+      status:
+        type: integer
+    type: object
 host: func-smh-ss-webapi-stage-003.azurewebsites.net
 info:
   contact: {}
@@ -92,8 +90,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: This function retrieves event details based on providerId and eventId
-        from the request.
+      description: This function retrieves provider events based on providerId and
+        eventId from the request.
       parameters:
       - description: Event ID
         in: query
@@ -106,9 +104,9 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: Fetch event details
+      summary: '[1] Fetch provider events'
       tags:
-      - Search Provider without Events
+      - Search Providers with Events
   /api/event/book:
     post:
       consumes:
@@ -125,7 +123,7 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: Book an Event
+      summary: '[6] Book an Event'
       tags:
       - Book Event
   /api/event/list:
@@ -144,7 +142,7 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: Search Available Time Slots
+      summary: '[3] Search Available Time Slots'
       tags:
       - events
   /api/healthCheck:
@@ -159,36 +157,12 @@ paths:
         "200":
           description: Health check successful
           schema:
-            $ref: '#/definitions/dtos.InterceptorResponse'
+            $ref: '#/definitions/healthCheck.HealthResponse'
       security:
       - BearerAuth: []
-      summary: Health Check
+      summary: '[0] Health Check'
       tags:
       - Health Check
-  /api/incupdate:
-    post:
-      consumes:
-      - application/json
-      description: Handles the incremental update of calendar events based on booking
-        status.
-      produces:
-      - application/json
-      responses: {}
-      summary: Incremental Update of Calendar Events
-      tags:
-      - Calendar
-  /api/load:
-    post:
-      consumes:
-      - application/json
-      description: This function initiates the loading of calendars and events for
-        providers asynchronously.
-      produces:
-      - application/json
-      responses: {}
-      summary: Load calendars and events
-      tags:
-      - Calendar
   /api/provider:
     post:
       consumes:
@@ -205,28 +179,9 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: Search for Healthcare Providers
+      summary: '[2] Search for Healthcare Providers'
       tags:
       - providers
-  /api/v2/provider:
-    post:
-      consumes:
-      - application/json
-      description: Retrieves a list of healthcare providers based on the provided
-        search filters.
-      parameters:
-      - description: Search filters for providers
-        in: body
-        name: filters
-        required: true
-        schema:
-          $ref: '#/definitions/dtos.ProviderRequest'
-      produces:
-      - application/json
-      responses: {}
-      summary: Fetch healthcare providers
-      tags:
-      - Search Providers with Events
 schemes:
 - https
 securityDefinitions:

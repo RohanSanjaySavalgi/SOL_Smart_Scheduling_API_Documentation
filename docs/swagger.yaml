@@ -17,6 +17,17 @@ definitions:
         - $ref: '#/definitions/dtos.UserInfo'
         description: Information about the user making the booking
     type: object
+  dtos.InterceptorResponse:
+    properties:
+      data:
+        description: The main data payload of the response, can be of any type
+      errorCode:
+        description: A code representing the specific error type, if applicable
+        type: string
+      errorMessage:
+        description: A message describing the error, if any occurred
+        type: string
+    type: object
   dtos.Location:
     properties:
       facility:
@@ -90,8 +101,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: This function retrieves provider events based on providerId and
-        eventId from the request.
+      description: This function retrieves event details based on providerId and eventId
+        from the request.
       parameters:
       - description: Event ID
         in: query
@@ -104,9 +115,9 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: '[1] Fetch provider events'
+      summary: '[5] Fetch event details'
       tags:
-      - Search Providers with Events
+      - Search Events
   /api/event/book:
     post:
       consumes:
@@ -157,12 +168,18 @@ paths:
         "200":
           description: Health check successful
           schema:
-            $ref: '#/definitions/healthCheck.HealthResponse'
+            allOf:
+            - $ref: '#/definitions/dtos.InterceptorResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/healthCheck.HealthResponse'
+              type: object
       security:
       - BearerAuth: []
-      summary: '[0] Health Check'
+      summary: Health Check
       tags:
       - Health Check
+      x-order: 0
   /api/provider:
     post:
       consumes:
@@ -182,6 +199,48 @@ paths:
       summary: '[2] Search for Healthcare Providers'
       tags:
       - providers
+  /api/provider/info:
+    get:
+      consumes:
+      - application/json
+      description: This function retrieves provider details based on providerId and
+        eventId from the request.
+      parameters:
+      - description: Event ID
+        in: query
+        name: eventId
+        type: string
+      - description: Provider ID
+        in: query
+        name: providerId
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: '[4] Fetch provider details'
+      tags:
+      - Search Provider without Events
+  /api/v2/provider:
+    get:
+      consumes:
+      - application/json
+      description: This function retrieves provider events based on providerId and
+        eventId from the request.
+      parameters:
+      - description: Event ID
+        in: query
+        name: eventId
+        type: string
+      - description: Provider ID
+        in: query
+        name: providerId
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: '[1] Fetch provider events'
+      tags:
+      - Search Providers with Events
 schemes:
 - https
 securityDefinitions:

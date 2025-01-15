@@ -115,9 +115,9 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: '[5] Fetch event details'
+      summary: Fetch event details
       tags:
-      - Search Events
+      - Events
   /api/event/book:
     post:
       consumes:
@@ -153,9 +153,9 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: '[3] Search Available Time Slots'
+      summary: Search Events
       tags:
-      - events
+      - Events
   /api/healthCheck:
     get:
       consumes:
@@ -198,7 +198,7 @@ paths:
       responses: {}
       summary: '[2] Search for Healthcare Providers'
       tags:
-      - providers
+      - Providers
   /api/provider/info:
     get:
       consumes:
@@ -217,30 +217,27 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: '[4] Fetch provider details'
+      summary: Fetch provider details
       tags:
-      - Search Provider without Events
+      - Providers
   /api/v2/provider:
     get:
       consumes:
       - application/json
-      description: This function retrieves provider events based on providerId and
-        eventId from the request.
+      description: Fetch providers based on search filters
       parameters:
-      - description: Event ID
-        in: query
-        name: eventId
-        type: string
-      - description: Provider ID
-        in: query
-        name: providerId
-        type: string
+      - description: Provider Request Body
+        in: body
+        name: ProviderRequest
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.ProviderRequest'
       produces:
       - application/json
       responses: {}
-      summary: '[1] Fetch provider events'
+      summary: Fetch providers attached with events
       tags:
-      - Search Providers with Events
+      - Providers with Events
 schemes:
 - https
 securityDefinitions:

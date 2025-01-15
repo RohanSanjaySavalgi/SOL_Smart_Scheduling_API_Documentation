@@ -115,7 +115,9 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: Fetch event details
+      security:
+      - BearerAuth: []
+      summary: Fetch details of single event
       tags:
       - Events
   /api/event/book:
@@ -153,7 +155,7 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: Search Events
+      summary: Search Events by providerId
       tags:
       - Events
   /api/healthCheck:
@@ -198,7 +200,7 @@ paths:
       responses: {}
       security:
       - BearerAuth: []
-      summary: Search for Healthcare Providers
+      summary: Search Providers
       tags:
       - Providers
   /api/provider/info:
@@ -208,9 +210,9 @@ paths:
       description: This function retrieves provider details based on providerId and
         eventId from the request.
       parameters:
-      - description: Event ID
+      - description: Resource ID
         in: query
-        name: eventId
+        name: resourceId
         type: string
       - description: Provider ID
         in: query
@@ -219,7 +221,9 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: Fetch provider details
+      security:
+      - BearerAuth: []
+      summary: Fetch details of provider
       tags:
       - Providers
   /api/v2/provider:

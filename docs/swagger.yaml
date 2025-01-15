@@ -138,7 +138,9 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: '[6] Book an Event'
+      security:
+      - BearerAuth: []
+      summary: Book an Event
       tags:
       - Book Event
   /api/event/list:

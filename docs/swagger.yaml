@@ -17,6 +17,43 @@ definitions:
         - $ref: '#/definitions/dtos.UserInfo'
         description: Information about the user making the booking
     type: object
+  dtos.EventResponse:
+    properties:
+      booked:
+        description: Indicates if the event is booked
+        type: boolean
+      date:
+        description: Date of the event
+        type: string
+      duration:
+        description: Duration of the event in minutes
+        type: integer
+      eventId:
+        description: Unique identifier for the event
+        type: string
+      eventType:
+        description: Type of the event
+        type: string
+      facility:
+        description: Facility location where the session will be held
+        type: string
+      location:
+        description: Location of where the session will happen
+        type: string
+      provider:
+        allOf:
+        - $ref: '#/definitions/dtos.ProviderResponse'
+        description: Information about the provider
+      providerId:
+        description: ID of the provider associated with the event
+        type: string
+      slotstart:
+        description: Start time of the event slot
+        type: string
+      summary:
+        description: Summary of the event
+        type: string
+    type: object
   dtos.InterceptorResponse:
     properties:
       data:
@@ -65,6 +102,53 @@ definitions:
         description: Location details for filtering
       therapeuticModality:
         description: Preferred therapeutic modality
+        type: string
+    type: object
+  dtos.ProviderResponse:
+    properties:
+      bio:
+        description: Biography of the provider
+        type: string
+      clinicalFocus:
+        description: List of clinical areas the provider focuses on
+        items:
+          type: string
+        type: array
+      ethnicity:
+        description: Ethnicity of the provider
+        type: string
+      events:
+        description: Calendar events for this particular provider
+        items:
+          $ref: '#/definitions/dtos.EventResponse'
+        type: array
+      firstName:
+        description: First name of the provider
+        type: string
+      gender:
+        description: Gender of the provider
+        type: string
+      id:
+        description: Unique identifier for the provider
+        type: string
+      image:
+        description: URL of the provider's image
+        type: string
+      language:
+        description: Language spoken by the provider
+        type: string
+      lastName:
+        description: Last name of the provider
+        type: string
+      location:
+        allOf:
+        - $ref: '#/definitions/dtos.Location'
+        description: Location details of the provider
+      name:
+        description: Full name of the provider
+        type: string
+      profileLink:
+        description: This is a URL which holds the extended bio of the provider
         type: string
     type: object
   dtos.SearchEventRequest:
@@ -187,7 +271,6 @@ paths:
       summary: Health Check
       tags:
       - Health Check
-      x-order: 0
   /api/provider:
     post:
       consumes:
@@ -246,7 +329,18 @@ paths:
           $ref: '#/definitions/dtos.ProviderRequest'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: Successfully fetched providers and events
+          schema:
+            allOf:
+            - $ref: '#/definitions/dtos.InterceptorResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dtos.ProviderResponse'
+                  type: array
+              type: object
       security:
       - BearerAuth: []
       summary: Fetch providers attached with events

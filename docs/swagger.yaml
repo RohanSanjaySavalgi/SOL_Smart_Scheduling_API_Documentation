@@ -196,7 +196,9 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: '[2] Search for Healthcare Providers'
+      security:
+      - BearerAuth: []
+      summary: Search for Healthcare Providers
       tags:
       - Providers
   /api/provider/info:
@@ -221,7 +223,7 @@ paths:
       tags:
       - Providers
   /api/v2/provider:
-    get:
+    post:
       consumes:
       - application/json
       description: Fetch providers based on search filters

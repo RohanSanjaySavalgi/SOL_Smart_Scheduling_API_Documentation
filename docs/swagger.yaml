@@ -237,6 +237,8 @@ paths:
       produces:
       - application/json
       responses: {}
+      security:
+      - BearerAuth: []
       summary: Fetch providers attached with events
       tags:
       - Providers with Events
